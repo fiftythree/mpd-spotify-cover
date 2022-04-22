@@ -1,4 +1,3 @@
-use std::fmt::Display;
 use datetime::{Duration, Instant};
 
 pub fn offset_time_by_expiration(expires_in: i64) -> i64 {
