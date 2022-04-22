@@ -16,7 +16,7 @@ pub fn run(mut config: config::Config) {
 
     let mut auth_url = String::new();
     io::stdin().read_line(&mut auth_url)
-        .expect("unable to read from stdout");
+        .expect("unable to read from stdin");
 
     let opt_pair: Option<(&str, &str)> = try {
         let code_index      = auth_url.find("?code=")?;
