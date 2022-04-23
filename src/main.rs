@@ -1,7 +1,5 @@
 #![feature(try_blocks, iter_intersperse)]
 
-extern crate core;
-
 use log::LevelFilter;
 use simplelog::{Config, SimpleLogger};
 
