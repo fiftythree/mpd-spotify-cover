@@ -1,8 +1,11 @@
 use std::io;
 use log::*;
 
-use crate::{spotify_api, util};
-use crate::config;
+use crate::{
+    spotify_api,
+    util,
+    config
+};
 
 pub fn run(mut config: config::Config) {
     println!(

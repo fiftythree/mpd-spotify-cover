@@ -4,11 +4,14 @@ use std::fs::File;
 use std::io;
 use std::path::Path;
 use datetime::Instant;
-
 use log::*;
 
-use crate::{config, mpd_api, spotify_api, util};
-use crate::config::Config;
+use crate::{
+    config,
+    mpd_api,
+    spotify_api,
+    util
+};
 
 pub fn run(mut config: config::Config) {
     let expires_at = config.spotify.expires_at
@@ -98,7 +101,7 @@ fn update_token(config: &mut config::Config) {
     debug!("Configuration updated and written to disk");
 }
 
-fn lookup_images_by_name(config: &Config, artist: &str, title: &str)
+fn lookup_images_by_name(config: &config::Config, artist: &str, title: &str)
   -> Result<Vec<spotify_api::Image>, Box<dyn Error>> {
 
     let results = spotify_api::search_track(
@@ -123,7 +126,7 @@ fn lookup_images_by_name(config: &Config, artist: &str, title: &str)
     }
 }
 
-fn lookup_images_by_album_id(config: &Config, id: &str)
+fn lookup_images_by_album_id(config: &config::Config, id: &str)
   -> Result<Vec<spotify_api::Image>, Box<dyn Error>> {
 
     spotify_api::get_album(config, id).and_then(|r| Ok(r.images))
