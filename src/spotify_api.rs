@@ -4,6 +4,43 @@ use serde::Deserialize;
 
 use crate::config;
 
+#[derive(Deserialize, Clone)]
+pub struct Album {
+    pub name: String,
+    pub images: Vec<Image>,
+}
+
+#[derive(Deserialize, Clone)]
+pub struct Image {
+    pub width: u32,
+    pub height: u32,
+    pub url: String,
+}
+
+#[derive(Deserialize)]
+pub struct Artist {
+    pub name: String,
+}
+
+#[derive(Deserialize)]
+pub struct SearchResults {
+    pub tracks: Option<SearchResult<Track>>,
+}
+
+#[derive(Deserialize)]
+pub struct SearchResult<T> {
+    pub href: String,
+    pub items: Vec<T>,
+}
+
+#[derive(Deserialize)]
+pub struct Track {
+    pub album: Album,
+    pub artists: Vec<Artist>,
+    pub id: String,
+    pub name: String,
+}
+
 #[derive(Deserialize)]
 pub struct ExchangeCodeResponse {
     pub access_token: String,
@@ -93,43 +130,6 @@ pub fn refresh_token(config: &config::Config)
             ("grant_type", "refresh_token")]
         )
     ?)
-}
-
-#[derive(Deserialize, Clone)]
-pub struct Album {
-    pub name: String,
-    pub images: Vec<Image>,
-}
-
-#[derive(Deserialize, Clone)]
-pub struct Image {
-    pub width: u32,
-    pub height: u32,
-    pub url: String,
-}
-
-#[derive(Deserialize)]
-pub struct Artist {
-    pub name: String,
-}
-
-#[derive(Deserialize)]
-pub struct SearchResults {
-    pub tracks: Option<SearchResult<Track>>,
-}
-
-#[derive(Deserialize)]
-pub struct SearchResult<T> {
-    pub href: String,
-    pub items: Vec<T>,
-}
-
-#[derive(Deserialize)]
-pub struct Track {
-    pub album: Album,
-    pub artists: Vec<Artist>,
-    pub id: String,
-    pub name: String,
 }
 
 pub fn get_album(config: &config::Config, id: &str)
