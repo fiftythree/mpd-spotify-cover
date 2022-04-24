@@ -104,7 +104,7 @@ fn update_token(config: &mut config::Config) {
 fn lookup_images_by_name(config: &config::Config, artist: &str, title: &str)
   -> Result<Vec<spotify_api::Image>, Box<dyn Error>> {
 
-    let results = spotify_api::search_track(
+    let results = spotify_api::search(
         config,
         /* query */ &format!("{} - {}", artist, title),
         /* type  */ "track")?;

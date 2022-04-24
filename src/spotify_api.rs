@@ -147,7 +147,7 @@ pub fn get_album(config: &config::Config, id: &str)
     Ok(map_response_json(client.execute(request)?)?)
 }
 
-pub fn search_track(config: &config::Config, q: &str, type_: &str)
+pub fn search(config: &config::Config, q: &str, type_: &str)
   -> Result<SearchResults, Box<dyn Error>> {
 
     let client = Client::new();
