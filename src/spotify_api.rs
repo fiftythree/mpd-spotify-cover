@@ -69,7 +69,7 @@ const SPOTIFY_SEARCH_ENDPOINT:      &str = "https://api.spotify.com/v1/search";
 fn map_error_result(response: Response) -> String {
     response.json::<SpotifyError>()
         .map(|e| e.error_description)
-        .unwrap_or(String::from("Server returned an unknown error"))
+        .unwrap_or_else(|_| String::from("Server returned an unknown error"))
 }
 
 fn map_response_json<T: for <'de> Deserialize<'de>>(response: Response)
@@ -144,7 +144,7 @@ pub fn get_album(config: &config::Config, id: &str)
             .expect("access token is not configured"))
         .build()?;
 
-    Ok(map_response_json(client.execute(request)?)?)
+    map_response_json(client.execute(request)?)
 }
 
 pub fn search(config: &config::Config, q: &str, type_: &str)
@@ -159,5 +159,5 @@ pub fn search(config: &config::Config, q: &str, type_: &str)
             .expect("access token is not configured"))
         .build()?;
 
-    Ok(map_response_json(client.execute(request)?)?)
+    map_response_json(client.execute(request)?)
 }

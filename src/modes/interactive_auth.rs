@@ -12,7 +12,7 @@ pub fn run(mut config: config::Config) {
         "You are not authenticated. To generate an access token, visit the following URL: {}\
         \nReplace 'your-app-redirect-uri' with the configured URI.\
         \nAfter authenticating, copy the URL from your browser's address bar, and paste it here:",
-        format!("https://accounts.spotify.com/authorize\
+        format_args!("https://accounts.spotify.com/authorize\
             ?client_id={}\
             &response_type=code\
             &redirect_uri=your-app-redirect-uri", config.spotify.client_id));

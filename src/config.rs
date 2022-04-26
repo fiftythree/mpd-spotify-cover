@@ -35,9 +35,9 @@ impl Config {
     pub fn auth_configured(&self) -> bool {
         let spotify_config = &self.spotify;
 
-        return spotify_config.access_token.is_some()
+        spotify_config.access_token.is_some()
             && spotify_config.refresh_token.is_some()
-            && spotify_config.expires_at.is_some();
+            && spotify_config.expires_at.is_some()
     }
 }
 
@@ -46,12 +46,10 @@ pub fn read_config() -> Result<Config, String> {
 
     toml::from_slice(fs::read_to_string(path)
         .map_err(|err| format!(
-            "Couldn't read the config file: {}",
-            err.to_string())
+            "Couldn't read the config file: {}", err)
         )?.as_bytes()
     ).map_err(|err| format!(
-        "Couldn't deserialize config: {}",
-        err.to_string()
+        "Couldn't deserialize config: {}", err
     ))
 }
 

@@ -53,7 +53,7 @@ pub fn run(mut config: config::Config) {
     // parse size from config into width & height
     let size = {
         let size_parts: Vec<u32> = config.cover.preferred_size
-            .split("x")
+            .split('x')
             .map(|e| e.parse::<u32>()
                 .expect("unable to parse size part"))
             .take(2).collect();
@@ -64,7 +64,7 @@ pub fn run(mut config: config::Config) {
     if let Some(image) = images.iter().find(|i| i.width == size.0 && i.height == size.1) {
         info!("Downloading image: {}", image.url);
 
-        download_image(&image.url, &config.cover.output_path)
+        download_to_file(&image.url, &config.cover.output_path)
             .expect("unable to download image");
 
         info!("Image downloaded to {}", config.cover.output_path);
@@ -85,7 +85,7 @@ pub fn run(mut config: config::Config) {
 fn update_token(config: &mut config::Config) {
     debug!("Access token has expired, requesting a new one");
 
-    let response = spotify_api::refresh_token(&config)
+    let response = spotify_api::refresh_token(config)
         .expect("unable to refresh token");
 
     trace!("Received token: {}", response.access_token);
@@ -95,7 +95,7 @@ fn update_token(config: &mut config::Config) {
 
     trace!("Updating configuration");
 
-    config::save_config(&config)
+    config::save_config(config)
         .expect("unable to save config");
 
     debug!("Configuration updated and written to disk");
@@ -129,20 +129,20 @@ fn lookup_images_by_name(config: &config::Config, artist: &str, title: &str)
 fn lookup_images_by_album_id(config: &config::Config, id: &str)
   -> Result<Vec<spotify_api::Image>, Box<dyn Error>> {
 
-    spotify_api::get_album(config, id).and_then(|r| Ok(r.images))
+    spotify_api::get_album(config, id).map(|r| r.images)
 }
 
-fn download_image(url: &str, path: &str)
+fn download_to_file(url: &str, path: &str)
   -> Result<(), Box<dyn Error>> {
 
     let os_path = Path::new(path);
-    let output_bytes = reqwest::blocking::get(url)?.bytes()?;
+    let input_bytes = reqwest::blocking::get(url)?.bytes()?;
 
-    File::create(os_path)
-        .and_then(|mut f| {
-            // copy output stream to the file
-            io::copy(&mut output_bytes.as_ref(), &mut f)?; Ok(())
-        })?;
+    // write data to the file
+    io::copy(
+        &mut input_bytes.as_ref(),
+        &mut File::create(os_path)?
+    )?;
 
     Ok(())
 }
